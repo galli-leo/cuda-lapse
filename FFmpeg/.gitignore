@@ -1,0 +1,8 @@
+# For now let's ignore the ffmpeg libs
+
+lib/
+include/
+
+# We want the exe though
+!bin/
+!bin/ffmpeg.exe
