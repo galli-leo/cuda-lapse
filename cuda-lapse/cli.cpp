@@ -3,6 +3,7 @@
 #include "cli.h"
 #include "clipp.h"
 #include "cuda/cuda_util.h"
+#include "images.h"
 
 program_configuration config;
 
@@ -29,8 +30,14 @@ bool parse_args(int argc, char* argv[])
 		// Threading
 		option("-t", "--threads").doc("Specify the number of CPU threads to use for reading in images.") & value("num", config.threads),
 		option("-r", "--delay").doc("Specify the amount of delay for the reader worker per file.") & value("delay", config.reader_delay),
+		// Input
+		option("-pw", "--width").doc("Specify the width of the input image.") & value("width", config.picture_width),
+		option("-ph", "--height").doc("Specify the height of the input image.") & value("height", config.picture_height),
 		// Output file
 		option("-o", "--output").doc("Output video file. This should end in a h264 supported container!") & value("output", config.output),
+		// Fonts
+		option("-df", "--date-font").doc("Specify the path to the json of the font used for displaying the date.") & value("font-64.json", config.date_font),
+		option("-tf", "--time-font").doc("Specify the path to the json of the font used for displaying the time.") & value("font-80.json", config.time_font),
 		// Directory
 		value("directory", config.directory).doc("Directory containing the time lapse images.")
 		);
@@ -41,6 +48,9 @@ bool parse_args(int argc, char* argv[])
 
 	if (parse_result && !show_info)
 	{
+		picture_size = config.picture_width * config.picture_height;
+		input_size = picture_size * sizeof(rgb_pixel);
+		output_size = picture_size * sizeof(rgba_pixel);
 		return true;
 	}
 

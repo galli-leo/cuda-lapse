@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
 		auto vram_map = devices_and_memory();
 
-		long needed_vram = RenderWorker::VRAMNeeded(4000, 3000);
+		const long needed_vram = RenderWorker::VRAMNeeded();
 		// Create Render workers
 		for (auto pair : vram_map)
 		{

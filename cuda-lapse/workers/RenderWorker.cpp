@@ -1,10 +1,7 @@
 #include "RenderWorker.h"
 #include "../cuda/blend.h"
 #include "PerformanceCounter.h"
-
-long pic_size = 4000 * 3000;
-long input_size = pic_size * sizeof(rgb_pixel);
-long output_size = pic_size * sizeof(rgba_pixel);
+#include "../cli.h"
 
 PERF_COUNTER_INIT(render)
 
@@ -17,17 +14,14 @@ output_frame* RenderWorker::Process(output_frame* current)
 	{
 		auto dev_input = this->dev_inputs.at(i);
 		this->LogError("cudaMemcpy failed while trying to copy over host input frame data", cudaMemcpyAsync(dev_input, input->raw_data, input_size, cudaMemcpyHostToDevice));
-		//free(input->raw_data);
-		//input->raw_data = nullptr;
-		//this->free->enqueue(input);
 		i++;
 	}
 
-	int blocks = (pic_size) / THREADS_PER_BLOCK;
+	int blocks = (picture_size) / THREADS_PER_BLOCK;
 
 	//this->logger->trace("Launching Kernel with {} blocks and {} threads per block", blocks, THREADS_PER_BLOCK);
 
-	blend_directly(this->dev_inputs_arr, this->dev_output, current->inputs.size(), pic_size, blocks, THREADS_PER_BLOCK);
+	blend_directly(this->dev_inputs_arr, this->dev_output, current->inputs.size(), picture_size, blocks, THREADS_PER_BLOCK);
 
 	//this->logger->trace("Sucessfully launched kernel");
 
@@ -94,11 +88,8 @@ void RenderWorker::InitializeDevice(int device)
 	this->logger->debug("Finished allocating device memory");
 }
 
-long RenderWorker::VRAMNeeded(int width, int height)
+long RenderWorker::VRAMNeeded()
 {
-	long input_size = width * height * 3;
-	long output_size = width * height * 4;
-
 	return input_size * MAX_INPUTS + 2*output_size;
 }
 

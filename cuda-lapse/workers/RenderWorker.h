@@ -29,7 +29,7 @@ public:
 	 * \param height 
 	 * \return 
 	 */
-	static long VRAMNeeded(int width, int height);
+	static long VRAMNeeded();
 
 	BlockingImageQueue* free;
 
