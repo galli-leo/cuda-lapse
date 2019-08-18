@@ -1,0 +1,15 @@
+[submodule "TinyEXIF"]
+	path = TinyEXIF
+	url = https://github.com/cdcseacave/TinyEXIF.git
+[submodule "clipp"]
+	path = clipp
+	url = https://github.com/muellan/clipp.git
+[submodule "concurrentqueue"]
+	path = concurrentqueue
+	url = https://github.com/cameron314/concurrentqueue.git
+[submodule "spdlog"]
+	path = spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "tinyxml2"]
+	path = tinyxml2
+	url = https://github.com/leethomason/tinyxml2.git
