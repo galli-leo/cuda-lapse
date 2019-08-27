@@ -7,6 +7,7 @@ PERF_COUNTER_INIT(jpeg)
 
 image* JPEGWorker::Process(image* current)
 {
+	return current;
 	current->raw_size = input_size;
 
 	current->raw_data = static_cast<rgb_pixel*>(malloc(current->raw_size));

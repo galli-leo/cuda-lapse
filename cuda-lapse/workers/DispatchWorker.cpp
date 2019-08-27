@@ -14,14 +14,14 @@ output_frame* DispatchWorker::Process(image* current)
 		if (output->inputs.size() == output->expected_count && output->state == created)
 		{
 			bool all_good = true;
-			for (auto input : output->inputs)
+			/*for (auto input : output->inputs)
 			{
 				if (input->state != decompressed)
 				{
 					all_good = false;
 					break;
 				}
-			}
+			}*/
 
 			if (all_good)
 			{

@@ -50,7 +50,7 @@ void* EncoderWorker::Process(output_frame* current)
 				ss << frame->id << ", ";
 			}
 
-			this->logger->info("Pending frames: {}", ss.str());
+			//this->logger->info("Pending frames: {}", ss.str());
 		}
 	}
 

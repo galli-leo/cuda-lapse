@@ -74,20 +74,22 @@ int main(int argc, char* argv[])
 		auto vram_map = devices_and_memory();
 
 		const long needed_vram = RenderWorker::VRAMNeeded();
+		RenderWorker* testWorker = nullptr;
 		// Create Render workers
 		for (auto pair : vram_map)
 		{
 			int device = pair.first;
 			size_t vram = pair.second;
 
-			int threads = vram / needed_vram;
+			int threads = vram / needed_vram / 0.6;
 
 			logger->info("Creating {} Render Threads for Device {} with available VRAM {}", threads, device, vram);
 
-			BaseWorker<output_frame*, output_frame*>::CreateAndStartMany<RenderWorker>(workers, dispatcherToRender, renderToEncoder, threads, [device, renderToFree](RenderWorker* renderWorker)
+			BaseWorker<output_frame*, output_frame*>::CreateAndStartMany<RenderWorker>(workers, dispatcherToRender, renderToEncoder, threads, [device, renderToFree, &testWorker](RenderWorker* renderWorker)
 			{
 				renderWorker->device = device;
 				renderWorker->free = renderToFree;
+				testWorker = renderWorker;
 			});
 		}
 
@@ -98,6 +100,7 @@ int main(int argc, char* argv[])
 		EncoderWorker* encoderWorker = BaseWorker<output_frame*, void*>::CreateAndStart<EncoderWorker>(workers, renderToEncoder, nullptr);
 		encoderWorker->InitializeEncoder(config.output);
 		//create_and_start<EncoderWorker, BlockingOutputQueue*, string>(workers, renderToEncoder, config.output);
+
 
 		for (auto worker : workers)
 		{

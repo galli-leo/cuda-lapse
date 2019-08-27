@@ -7,6 +7,10 @@
 
 program_configuration config;
 
+long picture_size;
+long input_size;
+long output_size;
+
 bool parse_args(int argc, char* argv[])
 {
 	using namespace clipp;

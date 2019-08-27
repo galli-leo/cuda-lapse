@@ -25,12 +25,36 @@ __global__ void blendKernel(rgb_pixel **frames, rgba_pixel *output, int count, i
 	}
 }
 
+__global__ void blendSingleKernel(rgb_pixel *frame, rgba_pixel *output, int max)
+{
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (i < max)
+	{
+		unsigned int red = frame[i].red * 1 / 10.0;
+		unsigned int green = frame[i].green * 1 / 10.0;
+		unsigned int blue = frame[i].blue * 1 / 10.0;
+		unsigned int value = (0xff & red) + ((green << 8) & 0xff00) + ((blue << 16) & 0xff0000);
+		//atomicAdd((int*)&output[i], value);
+		unsigned int* output_loc = (unsigned int*)&output[i];
+		atomicAdd(output_loc, value);
+		//*output_loc = *output_loc + value;
+		output[i].alpha = 0xff;
+	}
+}
+
 #define THREADS_PER_BLOCK 1024
 
 void blend_directly(rgb_pixel **frames, rgba_pixel *output, int count, int max, int blocks, int threads_per_block)
 {
 	blendKernel << <blocks, threads_per_block >> > (frames, output, count, max);
 }
+
+void blend_single(rgb_pixel *frame, rgba_pixel *output, int max, int blocks, int threads_per_block, cudaStream_t stream)
+{
+	blendSingleKernel << <blocks, threads_per_block >> > (frame, output, max);
+}
+
 
 cudaError_t blendWithCuda(vector<image> frames, int width, int height, rgba_pixel* result)
 {

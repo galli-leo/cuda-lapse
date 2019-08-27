@@ -28,9 +28,9 @@ extern program_configuration config;
 /*
  * Precompute sizes needed for the space of storing input / output frames.
  */
-static long picture_size;
-static long input_size;
-static long output_size;
+extern long picture_size;
+extern long input_size;
+extern long output_size;
 
 /**
  * \brief Parses arguments in to the global config. Returns false if parsing failed / help is shown (indicates exit).

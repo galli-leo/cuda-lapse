@@ -2,8 +2,8 @@
 
 void* FreeWorker::Process(image* current)
 {
-	free(current->raw_data);
-	current->raw_data = nullptr;
+	free(current->jpeg_data);
+	current->jpeg_data = nullptr;
 
 	return nullptr;
 }
