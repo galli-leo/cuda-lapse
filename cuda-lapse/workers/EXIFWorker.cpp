@@ -1,11 +1,12 @@
 #include "EXIFWorker.h"
 #include <iostream>
 #include <fstream>
+
 #include "TinyEXIF.h"
-#include "../images_fmt.h"
 #include "PerformanceCounter.h"
 #include "../cli.h"
-#include "../ram_usage.h"
+#include "../util/ram_usage.h"
+#include "../items/image_fmt.h"
 
 PERF_COUNTER_INIT(exif)
 

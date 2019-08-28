@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseWorker.h"
-#include "../images.h"
-#include "../logger.h"
+#include "../items/image.h"
 
 class DirectoryWorker :
 	public BaseWorker<void*, image*>

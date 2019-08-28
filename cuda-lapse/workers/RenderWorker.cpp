@@ -2,15 +2,22 @@
 #include "../cuda/blend.h"
 #include "PerformanceCounter.h"
 #include "../cli.h"
+#pragma warning(push, 0)        
+#include "spdlog/fmt/fmt.h"
+#pragma warning(pop)
+
 #include <nvjpeg.h>
+#include "../util/date_names.h"
 
 PERF_COUNTER_INIT(render)
 
 #define THREADS_PER_BLOCK 1024
 
+#define CHECK(status, message, ...) this->LogError(status, spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, message, __VA_ARGS__)
+
 output_frame* RenderWorker::Process(output_frame* current)
 {
-	this->LogError("cudaMalloc Failed for output", cudaMalloc(&dev_output, output_size));
+	CHECK(cudaMalloc(&dev_output, output_size), "cudaMalloc failed to allocate output buffer.");
 
 	int blocks = (picture_size) / THREADS_PER_BLOCK;
 
@@ -20,7 +27,7 @@ output_frame* RenderWorker::Process(output_frame* current)
 		cudaStream_t stream = this->streams.at(i);
 
 		rgb_pixel* tmp = nullptr;
-		this->LogError("cudaMalloc failed for input", cudaMalloc(&tmp, input_size));
+		CHECK(cudaMalloc(&tmp, input_size), "cudaMalloc failed for input");
 		this->dev_inputs.push_back(tmp);
 
 		nvjpegImage_t image;
@@ -39,9 +46,48 @@ output_frame* RenderWorker::Process(output_frame* current)
 		cudaStreamSynchronize(stream);
 	}
 
+	auto lt = localtime(&current->timestamp);
+
+	// To make it more visually interesting we select a random int to be our minute in the range 0 to 10;
+	int min = lt->tm_min - (lt->tm_min % 10);
+	min += current->id % 10;
+
+	string time_str = fmt::format("{:02}:{:02}", lt->tm_hour, min);
+	string date_str = fmt::format("{}, {:02}. {}", short_weekday(lt->tm_wday), lt->tm_mday, short_month(lt->tm_mon));
+
+	text txt = create_text(time_str, &this->time_font);
+	add_line(&txt, date_str, &this->date_font);
+	txt.frame.pos.x = 3000;
+	txt.frame.pos.y = 2500;
+	anchor(&txt.frame, 0.5, 0.5);
+
+	cuda_text_char* cuda_chars;
+	
+	int size_chars = sizeof(cuda_text_char) * txt.characters.size();
+
+	CHECK(cudaMalloc(&cuda_chars, size_chars), "cudaMalloc Failed for text characters");
+
+	vector<cuda_text_char> host_cuda_chars;
+	for (auto txt_char : txt.characters)
+	{
+		host_cuda_chars.push_back(convert_char_to_cuda(txt_char, this->device));
+	}
+
+	CHECK(cudaMemcpy(cuda_chars, host_cuda_chars.data(), size_chars, cudaMemcpyHostToDevice), "cudaMemcpy failed while trying to copy text chars");
+
+	cuda_text cuda_txt{
+		cuda_chars,
+		txt.characters.size(),
+		txt.frame
+	};
+
+	render_text(cuda_txt, this->dev_output, picture_size, 4000, blocks, THREADS_PER_BLOCK);
+
+	CHECK(cudaDeviceSynchronize(), "cudaDeviceSynchronize failed after launching text render kernel");
+
 	current->output = static_cast<rgba_pixel*>(malloc(current->width * current->height * sizeof(rgba_pixel)));
 
-	this->LogError("cudaMemcpy failed while trying to copy back resulting frame", cudaMemcpy(current->output, this->dev_output, output_size, cudaMemcpyDeviceToHost));
+	CHECK(cudaMemcpy(current->output, this->dev_output, output_size, cudaMemcpyDeviceToHost), "cudaMemcpy failed while trying to copy back resulting frame");
 
 	current->state = rendered;
 
@@ -53,6 +99,8 @@ output_frame* RenderWorker::Process(output_frame* current)
 	}
 
 	cudaFree(this->dev_output);
+
+	cudaFree(cuda_chars);
 
 	this->dev_inputs.clear();
 
@@ -85,25 +133,29 @@ void RenderWorker::InitializeDevice(int device)
 	this->device = device;
 	this->logger->debug("Allocating device memory for this worker on device: {}.", device);
 
+#if !DEBUG_CUDA
 	cudaSetDevice(device);
-
+#endif
 	// Allocate buffers
 
 	for (int i = 0; i < MAX_INPUTS; i++)
 	{
 		cudaStream_t tmp;
-		this->LogError("cudaStreamCreate failed", cudaStreamCreate(&tmp));
+		CHECK(cudaStreamCreate(&tmp), "cudaStreamCreate failed");
 		this->streams.push_back(tmp);
 	}
 
 	int inputs_arr_size = sizeof(rgb_pixel*)*MAX_INPUTS;//this->dev_inputs.size();
 
-	this->LogError("cudaMalloc failed for input arr", cudaMalloc(&dev_inputs_arr, inputs_arr_size));
+	CHECK(cudaMalloc(&dev_inputs_arr, inputs_arr_size), "cudaMalloc failed for input arr");
 
 	this->LogJPEGError("createSimple failed", nvjpegCreate(NVJPEG_BACKEND_GPU_HYBRID, NULL, &this->handle));
 
 	this->LogJPEGError("Creating state failed", nvjpegJpegStateCreate(this->handle, &this->jpeg_state));
 
+	/*this->time_font = read_atlas(this->time_font_name);
+	this->date_font = read_atlas(this->date_font_name);*/
+	
 	this->logger->debug("Finished allocating device memory");
 }
 
@@ -112,10 +164,11 @@ long RenderWorker::VRAMNeeded()
 	return input_size * MAX_INPUTS + 2*output_size;
 }
 
-bool RenderWorker::LogError(string message, cudaError_t error)
+template<typename... Args>
+bool RenderWorker::LogError(cudaError_t error, spdlog::source_loc loc, string message, const Args& ... args)
 {
 	if (error == cudaSuccess) return true;
-	this->logger->error("{}: [{}] {}", message, cudaGetErrorName(error), cudaGetErrorString(error));
+	this->logger->log(loc, spdlog::level::err, "{}: (#{}) [{}] {}", fmt::format(message, args...), this->device, cudaGetErrorName(error), cudaGetErrorString(error));
 
 	return false;
 }

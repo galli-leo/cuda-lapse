@@ -1,6 +1,6 @@
 #include "BaseWorker.h"
-#include "../images.h"
-#include "../output_frame.h"
+#include "../items/image.h"
+#include "../items/output_frame.h"
 
 
 template <class TInput, class TOutput>

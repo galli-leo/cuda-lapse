@@ -1,8 +1,8 @@
 #pragma once
-#include "BaseWorker.h"
-#include "../images.h"
-#include "../logger.h"
 #include <turbojpeg.h>
+
+#include "BaseWorker.h"
+#include "../items/image.h"
 
 class JPEGWorker :
 	public BaseWorker<image*, image*>

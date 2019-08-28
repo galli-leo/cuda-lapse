@@ -1,17 +1,13 @@
 #include <set>
-#include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <ctime>
 
 #include <turbojpeg.h>
 
-#include "images.h"
-#include "util.h"
-#include "TinyEXIF.h"
-#include "logger.h"
-#include "spdlog/fmt/fmt.h"
+#include "image.h"
+#include "../util/util.h"
+#include "../util/logger.h"
 #include "spdlog/fmt/ostr.h"
 
 const static set<string> image_exts = { ".png", ".jpg", ".jpeg"};

@@ -1,8 +1,6 @@
 #pragma once
 #include "BaseWorker.h"
-#include "concurrentqueue.h"
-#include "../images.h"
-#include "../logger.h"
+#include "../items/image.h"
 
 class EXIFWorker :
 	public BaseWorker<image*, image*>

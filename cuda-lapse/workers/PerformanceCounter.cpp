@@ -1,5 +1,5 @@
 #include "PerformanceCounter.h"
-#include "../logger.h"
+#include "../util/logger.h"
 
 
 PerformanceCounter::PerformanceCounter(std::string name, long long milliseconds) : name(name), milliseconds(milliseconds)

@@ -1,10 +1,13 @@
 #pragma once
-#include "BaseWorker.h"
-#include "../images.h"
-#include "../logger.h"
-#include "../output_frame.h"
 #include <cuda_runtime.h>
 #include <nvjpeg.h>
+
+#include "BaseWorker.h"
+#include "../util/pixels.h"
+#include "../items/image.h"
+#include "../items/output_frame.h"
+#include "../text/atlas.h"
+
 
 class RenderWorker :
 	public BaseWorker<output_frame*, output_frame*>
@@ -38,6 +41,12 @@ public:
 
 	string name() override { return "RenderWorker"; }
 
+	atlas time_font;
+	atlas date_font;
+
+	string time_font_name;
+	string date_font_name;
+
 private:
 
 	rgba_pixel* dev_output;
@@ -49,7 +58,8 @@ private:
 	nvjpegHandle_t handle;
 	nvjpegJpegState_t jpeg_state;
 
-	bool LogError(string message, cudaError_t error);
+	template<typename... Args>
+	bool LogError(cudaError_t error, spdlog::source_loc loc, string message, const Args &... args);
 
 	bool LogJPEGError(string message, nvjpegStatus_t error);
 };

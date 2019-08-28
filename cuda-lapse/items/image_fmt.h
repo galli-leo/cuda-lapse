@@ -1,6 +1,9 @@
 #pragma once
-#include "images.h"
+#include "image.h"
+
+#pragma warning(push, 0)        
 #include "spdlog/fmt/fmt.h"
+#pragma warning(pop)
 
 namespace fmt {
 	template <>

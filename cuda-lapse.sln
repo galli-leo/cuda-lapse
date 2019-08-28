@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuda-lapse", "cuda-lapse\cuda-lapse.vcxproj", "{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuda-testing", "cuda-testing\cuda-testing.vcxproj", "{F3FA5E0A-A99A-4E28-9609-F53571133AAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,8 @@ Global
 		Debug-Dll|x86 = Debug-Dll|x86
 		Debug-Lib|x64 = Debug-Lib|x64
 		Debug-Lib|x86 = Debug-Lib|x86
+		Debug-No-Cuda|x64 = Debug-No-Cuda|x64
+		Debug-No-Cuda|x86 = Debug-No-Cuda|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 		Release-Dll|x64 = Release-Dll|x64
@@ -32,6 +36,9 @@ Global
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-Lib|x64.Build.0 = Debug|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-Lib|x86.ActiveCfg = Release|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-Lib|x86.Build.0 = Release|x64
+		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-No-Cuda|x64.ActiveCfg = Debug-No-Cuda|x64
+		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-No-Cuda|x64.Build.0 = Debug-No-Cuda|x64
+		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Debug-No-Cuda|x86.ActiveCfg = Debug-No-Cuda|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release|x64.ActiveCfg = Release|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release|x64.Build.0 = Release|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release|x86.ActiveCfg = Release|x64
@@ -43,6 +50,29 @@ Global
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release-Lib|x64.Build.0 = Release|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release-Lib|x86.ActiveCfg = Release|x64
 		{D1C5166D-2B7E-4DF0-9DB4-3E8EF91A051D}.Release-Lib|x86.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug|x64.ActiveCfg = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug|x86.ActiveCfg = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Dll|x64.ActiveCfg = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Dll|x64.Build.0 = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Dll|x86.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Dll|x86.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Lib|x64.ActiveCfg = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Lib|x64.Build.0 = Debug|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Lib|x86.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-Lib|x86.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-No-Cuda|x64.ActiveCfg = Debug-Cuda|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Debug-No-Cuda|x86.ActiveCfg = Debug-Cuda|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release|x64.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release|x64.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release|x86.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Dll|x64.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Dll|x64.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Dll|x86.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Dll|x86.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Lib|x64.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Lib|x64.Build.0 = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Lib|x86.ActiveCfg = Release|x64
+		{F3FA5E0A-A99A-4E28-9609-F53571133AAB}.Release-Lib|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 #pragma once
 #include <thread>
-#include "../logger.h"
+#include "../util/logger.h"
 #include "blockingconcurrentqueue.h"
 
 using namespace std;

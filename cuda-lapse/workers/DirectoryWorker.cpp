@@ -28,6 +28,8 @@ void DirectoryWorker::Run()
 			this->output->enqueue(current);
 
 			counter++;
+
+			//if (counter == 1000) break;
 		}
 	}
 

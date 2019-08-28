@@ -1,5 +1,5 @@
 #include "ManagerWorker.h"
-#include "../images_fmt.h"
+#include "../items/image_fmt.h"
 
 #define MIN_SPEEDUP 10
 

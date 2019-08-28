@@ -1,9 +1,8 @@
 #pragma once
 #include "BaseWorker.h"
-#include "../images.h"
-#include "../logger.h"
-#include "../output_frame.h"
-#include "../MP4Encoder.h"
+#include "../items/image.h"
+#include "../items/output_frame.h"
+#include "../nvcuvid/MP4Encoder.h"
 
 class EncoderWorker :
 	public BaseWorker<output_frame*, void*>

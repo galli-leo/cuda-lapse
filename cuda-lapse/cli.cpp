@@ -1,9 +1,12 @@
 #include <iostream>
 #include <filesystem>
+
 #include "cli.h"
+#pragma warning(push, 0)
 #include "clipp.h"
+#pragma warning(pop)
 #include "cuda/cuda_util.h"
-#include "images.h"
+#include "util/pixels.h"
 
 program_configuration config;
 

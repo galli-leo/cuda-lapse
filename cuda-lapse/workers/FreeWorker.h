@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseWorker.h"
-#include "../images.h"
+#include "../items/image.h"
 
 class FreeWorker :
 	public BaseWorker<image*, void*>

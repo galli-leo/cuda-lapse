@@ -9,7 +9,7 @@
 *
 */
 
-#include "NvEncoder/NvEncoderGL.h"
+#include "NvEncoderGL.h"
 
 NvEncoderGL::NvEncoderGL(uint32_t nWidth, uint32_t nHeight, NV_ENC_BUFFER_FORMAT eBufferFormat,
     uint32_t nExtraOutputDelay, bool bMotionEstimationOnly) :

@@ -1,8 +1,8 @@
 #pragma once
 #include "BaseWorker.h"
-#include "../images.h"
-#include "../output_frame.h"
-#include <unordered_set>
+#include "../items/image.h"
+#include "../items/output_frame.h"
+#include <unordered_map>
 
 class ManagerWorker :
 	public BaseWorker<image*, image*>
@@ -42,9 +42,9 @@ public:
 	string name() override { return "ManagerWorker"; }
 
 private:
-	int current_output_id = 0;
-	int current_input_id = -1;
-	int next_input_id = 0;
+	long long current_output_id = 0;
+	long long current_input_id = -1;
+	long long next_input_id = 0;
 
 	unordered_map<long long, output_frame*> inputs_to_output;
 

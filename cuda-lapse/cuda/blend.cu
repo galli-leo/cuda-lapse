@@ -43,6 +43,60 @@ __global__ void blendSingleKernel(rgb_pixel *frame, rgba_pixel *output, int max)
 	}
 }
 
+__device__ bool is_inside_cuda(frame frame, point p)
+{
+	point end;
+	end.x = frame.pos.x + frame.size.width;
+	end.y = frame.pos.y + frame.size.height;
+
+	return (frame.pos.x <= p.x && p.x < end.x) && (frame.pos.y <= p.y && p.y < end.y);
+}
+
+__device__ bool is_inside_cuda(frame frame, int x, int y)
+{
+	point p;
+	p.x = x;
+	p.y = y;
+	return is_inside_cuda(frame, p);
+}
+
+__global__ void renderTextKernel(cuda_text text, rgba_pixel* output, int max, int width)
+{
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (i < max)
+	{
+		int x = i % width;
+		int y = i / width;
+		if (is_inside_cuda(text.frame, x, y))
+		{
+			int relX = x - text.frame.pos.x;
+			int relY = y - text.frame.pos.y;
+			// We definitely need to render text here!
+			for (int k = 0; k < text.num_characters; k++)
+			{
+				cuda_text_char txt_char = text.characters[k];
+				if (is_inside_cuda(txt_char.frame, relX, relY))
+				{
+					// We need to render this specific character!
+					relX -= txt_char.frame.pos.x;
+					relY -= txt_char.frame.pos.y;
+
+					int charX = txt_char.atlas_frame.pos.x + relX;
+					int charY = txt_char.atlas_frame.pos.y - txt_char.atlas_frame.size.height + relY;
+
+					rgba_pixel charPix = txt_char.cuda_atlas[charX + charY * 1024];
+					float text_alpha = charPix.alpha / 255.0;
+					float bg_alpha = 1 - text_alpha;
+					output[i].red = output[i].red * bg_alpha + 0xff * text_alpha;
+					output[i].green = output[i].green * bg_alpha + 0xff * text_alpha;
+					output[i].blue = output[i].blue * bg_alpha + 0xff * text_alpha;
+				}
+			}
+		}
+	}
+}
+
 #define THREADS_PER_BLOCK 1024
 
 void blend_directly(rgb_pixel **frames, rgba_pixel *output, int count, int max, int blocks, int threads_per_block)
@@ -55,118 +109,7 @@ void blend_single(rgb_pixel *frame, rgba_pixel *output, int max, int blocks, int
 	blendSingleKernel << <blocks, threads_per_block >> > (frame, output, max);
 }
 
-
-cudaError_t blendWithCuda(vector<image> frames, int width, int height, rgba_pixel* result)
+void render_text(cuda_text text, rgba_pixel* output, int max, int width, int blocks, int threads_per_block)
 {
-	vector<rgb_pixel*> inputs = vector<rgb_pixel*>();
-	rgba_pixel* output = nullptr;
-	rgb_pixel** dev_inputs;
-
-	int frame_size = width * height * sizeof(rgb_pixel);
-	int output_size = width * height * sizeof(rgba_pixel);
-
-	cudaError_t cudaStatus = cudaSuccess;
-
-	// Choose which GPU to run on, change this on a multi-GPU system.
-	cudaStatus = cudaSetDevice(0);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-		goto Error;
-	}
-
-	// Allocate buffers
-
-	cudaStatus = cudaMalloc((void**)&output, output_size);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
-
-	for (auto frame : frames)
-	{
-		rgb_pixel* tmp = nullptr;
-		cudaStatus = cudaMalloc((void**)&tmp, frame_size);
-		if (cudaStatus != cudaSuccess) {
-			fprintf(stderr, "cudaMalloc failed!");
-			goto Error;
-		}
-		inputs.push_back(tmp);
-	}
-
-	int inputs_size = inputs.size() * sizeof(rgb_pixel*);
-
-	cudaStatus = cudaMalloc((void**)&dev_inputs, inputs_size);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-		goto Error;
-	}
-
-	// Copy input vectors from host memory to GPU buffers.
-	int i = 0;
-	for (auto frame : frames)
-	{
-		auto input = inputs.at(i);
-		cudaStatus = cudaMemcpy(input, frame.raw_data, frame_size, cudaMemcpyHostToDevice);
-		if (cudaStatus != cudaSuccess) {
-			fprintf(stderr, "cudaMemcpy failed!");
-			goto Error;
-		}
-		i++;
-	}
-
-	cudaStatus = cudaMemcpy(dev_inputs, inputs.data(), inputs_size, cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMemcpy failed!: %s", cudaGetErrorString(cudaStatus));
-		goto Error;
-	}
-
-	int blocks = (width * height) / THREADS_PER_BLOCK;
-
-	printf("Launching kernel with %d blocks and %d threads per block (%dx%d)\n", blocks, THREADS_PER_BLOCK, width, height);
-
-	blendKernel << <blocks, THREADS_PER_BLOCK>> > (dev_inputs, output, 10, width * height);
-
-	// Check for any errors launching the kernel
-	cudaStatus = cudaGetLastError();
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "blendKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-		goto Error;
-	}
-
-	// cudaDeviceSynchronize waits for the kernel to finish, and returns
-	// any errors encountered during the launch.
-	cudaStatus = cudaDeviceSynchronize();
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-		goto Error;
-	}
-
-	// Copy output vector from GPU buffer to host memory.
-	cudaStatus = cudaMemcpy(result, output, output_size, cudaMemcpyDeviceToHost);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMemcpy failed!");
-		goto Error;
-	}
-
-Error:
-	// Free resources
-	cudaFree(output);
-
-	for (auto input : inputs)
-	{
-		cudaFree(input);
-	}
-
-	return cudaStatus;
-}
-
-void blend_frames(vector<image> frames, rgba_pixel*& result)
-{
-	auto first = frames.at(0);
-	int width = first.width;
-	int height = first.height;
-
-	result = static_cast<rgba_pixel*>(malloc(width * height * sizeof(rgba_pixel)));
-
-	blendWithCuda(frames, width, height, result);
+	renderTextKernel << <blocks, threads_per_block >> > (text, output, max, width);
 }

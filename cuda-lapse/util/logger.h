@@ -1,13 +1,15 @@
 #pragma once
-#pragma warning(push, 0)  
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/sinks/sink.h"
 #include "spdlog/common.h"
-#pragma warning(pop)
 
 #define LOG_INIT(name)	auto static logger = create_logger(name);
+
+#define info(...) log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::info, __VA_ARGS__)
+
+#define error(...) log(spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, spdlog::level::err, __VA_ARGS__)
 
 using namespace std;
 
@@ -30,6 +32,8 @@ inline shared_ptr<spdlog::logger> create_logger(string module)
 	spdlog::logger logger(module, { console_sink, debug_file_sink, info_file_sink, warning_file_sink });
 
 	logger.set_level(spdlog::level::trace);
+
+	logger.set_pattern("[%Y-%m-%d %H:%M:%S.%e] (%t) [%n, %s:%#] [%^%l%$] %v");
 
 	return make_shared<spdlog::logger>(logger);
 }

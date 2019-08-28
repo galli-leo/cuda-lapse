@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cuda-lapse\cuda">
+      <UniqueIdentifier>{c2981acd-cb10-49fe-a291-3bee0cfb01a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse">
+      <UniqueIdentifier>{706b93fe-8529-4631-ba78-5bf53bc632a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\workers">
+      <UniqueIdentifier>{928f0e8e-acf5-437e-8c53-8387917908eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="clipp\include">
+      <UniqueIdentifier>{337b8c58-fbef-412a-bec1-0d641e7a15ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="clipp">
+      <UniqueIdentifier>{0792aa4e-66f2-439b-a219-3eed907f6811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinyEXIF">
+      <UniqueIdentifier>{d38f46bd-e1a3-4d5d-9020-f264e2383375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{2d3e055b-f2b2-4987-b014-47034fdf8ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\lodepng">
+      <UniqueIdentifier>{e0161466-aa31-43d0-9973-f731ab2e818e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\nvcuvid\Encoder">
+      <UniqueIdentifier>{e52da621-d3ae-4362-a698-e3700fc6aeca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\nvcuvid">
+      <UniqueIdentifier>{5b361dfc-b0e5-41b7-ba0d-587ce21dbde6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\text">
+      <UniqueIdentifier>{6d5e9efb-7199-4a20-be15-0a9d0f540884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cuda-lapse\util">
+      <UniqueIdentifier>{24ff6aa7-9134-4fec-a206-7e6cda4594b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="cuda\blend.cu">
+      <Filter>cuda-lapse\cuda</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cuda\blend.h">
+      <Filter>cuda-lapse\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\BaseWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\clipp\include\clipp.h">
+      <Filter>clipp\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TinyEXIF\TinyEXIF.h">
+      <Filter>TinyEXIF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tinyxml2\tinyxml2.h">
+      <Filter>tinyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="lodepng\lodepng.h">
+      <Filter>cuda-lapse\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\FreeWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\PerformanceCounter.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\DispatchWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\ManagerWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\DirectoryWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\EncoderWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\RenderWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\JPEGWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\EXIFWorker.h">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClInclude>
+    <ClInclude Include="cli.h">
+      <Filter>cuda-lapse</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\cuda_util.h">
+      <Filter>cuda-lapse\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="nvcuvid\Encoder\NvEncoder.h">
+      <Filter>cuda-lapse\nvcuvid\Encoder</Filter>
+    </ClInclude>
+    <ClInclude Include="nvcuvid\Encoder\NvEncoderCuda.h">
+      <Filter>cuda-lapse\nvcuvid\Encoder</Filter>
+    </ClInclude>
+    <ClInclude Include="nvcuvid\NvCodecUtils.h">
+      <Filter>cuda-lapse\nvcuvid</Filter>
+    </ClInclude>
+    <ClInclude Include="util\util.h">
+      <Filter>cuda-lapse\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\ram_usage.h">
+      <Filter>cuda-lapse\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\logger.h">
+      <Filter>cuda-lapse\util</Filter>
+    </ClInclude>
+    <ClInclude Include="workers\workers.h" />
+    <ClInclude Include="nvcuvid\MP4Encoder.h">
+      <Filter>cuda-lapse</Filter>
+    </ClInclude>
+    <ClInclude Include="items\output_frame.h">
+      <Filter>cuda-lapse</Filter>
+    </ClInclude>
+    <ClInclude Include="items\image.h">
+      <Filter>cuda-lapse</Filter>
+    </ClInclude>
+    <ClInclude Include="items\image_fmt.h">
+      <Filter>cuda-lapse</Filter>
+    </ClInclude>
+    <ClInclude Include="util\pixels.h" />
+    <ClInclude Include="util\geometry.h" />
+    <ClInclude Include="text\atlas.h" />
+    <ClInclude Include="text\text.h" />
+    <ClInclude Include="util\date_names.h" />
+    <ClInclude Include="text\cuda_text.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="workers\BaseWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TinyEXIF\TinyEXIF.cpp">
+      <Filter>TinyEXIF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="lodepng\lodepng.cpp">
+      <Filter>cuda-lapse\lodepng</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\FreeWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\PerformanceCounter.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\DispatchWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\ManagerWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\DirectoryWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\EncoderWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\RenderWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\JPEGWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="workers\EXIFWorker.cpp">
+      <Filter>cuda-lapse\workers</Filter>
+    </ClCompile>
+    <ClCompile Include="cli.cpp">
+      <Filter>cuda-lapse</Filter>
+    </ClCompile>
+    <ClCompile Include="cuda\cuda_util.cpp">
+      <Filter>cuda-lapse\cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>cuda-lapse</Filter>
+    </ClCompile>
+    <ClCompile Include="nvcuvid\Encoder\NvEncoder.cpp">
+      <Filter>cuda-lapse\nvcuvid\Encoder</Filter>
+    </ClCompile>
+    <ClCompile Include="nvcuvid\Encoder\NvEncoderCuda.cpp">
+      <Filter>cuda-lapse\nvcuvid\Encoder</Filter>
+    </ClCompile>
+    <ClCompile Include="nvcuvid\MP4Encoder.cpp">
+      <Filter>cuda-lapse</Filter>
+    </ClCompile>
+    <ClCompile Include="items\output_frame.cpp">
+      <Filter>cuda-lapse</Filter>
+    </ClCompile>
+    <ClCompile Include="items\image.cpp">
+      <Filter>cuda-lapse</Filter>
+    </ClCompile>
+    <ClCompile Include="text\atlas.cpp" />
+    <ClCompile Include="text\text.cpp" />
+    <ClCompile Include="text\cuda_text.cpp" />
+  </ItemGroup>
+</Project>

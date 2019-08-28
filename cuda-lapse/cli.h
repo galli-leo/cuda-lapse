@@ -19,8 +19,8 @@ struct program_configuration
 	string output = "output";
 	string directory;
 	string exe_directory;
-	string date_font;
-	string time_font;
+	string date_font = "arial-64";
+	string time_font = "arial-80";
 };
 
 extern program_configuration config;

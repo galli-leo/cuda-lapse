@@ -1,30 +1,14 @@
 #include <string>
-#include <fstream>
-#include <iostream>
 #include <filesystem>
-#include <set>
+
 #include "cli.h"
 #include "clipp.h"
-#include "images.h"
+#include "items/image.h"
 #include "cuda/cuda_util.h"
 #include "cuda/blend.h"
-#include <turbojpeg.h>
-#include <thread>
-#include "logger.h"
-
+#include "util/logger.h"
 #include "nvcuvid/Encoder/NvEncoderCuda.h"
-#include "cuda.h"
-#include "cuda_runtime_api.h"
-#include "MP4Encoder.h"
-#include "workers/BaseWorker.h"
-#include "workers/DirectoryWorker.h"
-#include "workers/EXIFWorker.h"
-#include "workers/JPEGWorker.h"
-#include "workers/RenderWorker.h"
-#include "workers/EncoderWorker.h"
-#include "workers/ManagerWorker.h"
-#include "workers/DispatchWorker.h"
-#include "workers/FreeWorker.h"
+#include "workers/workers.h"
 
 using namespace std;
 
@@ -71,27 +55,40 @@ int main(int argc, char* argv[])
 		dispatchWorker->manager = managerWorker;
 		//dispatchWorker->Start();
 
-		auto vram_map = devices_and_memory();
+		atlas time_font = read_atlas(config.time_font);
+		atlas date_font = read_atlas(config.date_font);
 
+		// We don't want multiple threads if we are trying to debug our cuda kernel. We also do not want to execute cudaSetDevice anytime, otherwise debugging cuda code just straight up doesn't work :(
+#if !DEBUG_CUDA
+		auto vram_map = devices_and_memory();
+		
 		const long needed_vram = RenderWorker::VRAMNeeded();
-		RenderWorker* testWorker = nullptr;
 		// Create Render workers
 		for (auto pair : vram_map)
 		{
 			int device = pair.first;
 			size_t vram = pair.second;
-
-			int threads = vram / needed_vram / 0.6;
+#else
+			int device = 0;
+#endif
+#if DEBUG_CUDA
+			int threads = 4;
+#else
+			int threads = static_cast<int>(vram / needed_vram / 0.6);
 
 			logger->info("Creating {} Render Threads for Device {} with available VRAM {}", threads, device, vram);
+#endif
 
-			BaseWorker<output_frame*, output_frame*>::CreateAndStartMany<RenderWorker>(workers, dispatcherToRender, renderToEncoder, threads, [device, renderToFree, &testWorker](RenderWorker* renderWorker)
+			BaseWorker<output_frame*, output_frame*>::CreateAndStartMany<RenderWorker>(workers, dispatcherToRender, renderToEncoder, threads, [device, renderToFree, time_font, date_font](RenderWorker* renderWorker)
 			{
 				renderWorker->device = device;
 				renderWorker->free = renderToFree;
-				testWorker = renderWorker;
+				renderWorker->time_font = time_font;//config.time_font;
+				renderWorker->date_font = date_font;//config.date_font;
 			});
+#if !DEBUG_CUDA
 		}
+#endif
 
 		BaseWorker<image*, void*>::CreateAndStartMany<FreeWorker>(workers, renderToFree, nullptr, 10);
 		//create_and_start_many<RenderWorker, BlockingOutputQueue*, BlockingOutputQueue*>(workers, dispatcherToRender, renderToEncoder, 10);

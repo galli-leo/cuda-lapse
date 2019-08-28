@@ -19,7 +19,7 @@
 #include <thread>
 #include <fstream>
 
-#include "../logger.h"
+#include "../util/logger.h"
 
 
 LOG_INIT("NvEncoder")

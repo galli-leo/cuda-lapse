@@ -1,0 +1,39 @@
+[2019-08-28 12:59:51.832] [TextHelper] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 12:59:51.856] [TextHelper] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 12:59:51.947] [TextHelper] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 12:59:52.083] [TextHelper] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 12:59:52.546] [TextHelper] [info] Loading font atlas image into memory of cuda device #1
+[2019-08-28 13:01:12.029] [TextHelper] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 13:01:12.049] [TextHelper] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 13:01:12.139] [TextHelper] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 13:01:12.280] [TextHelper] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 13:01:12.516] [TextHelper] [info] Loading font atlas image into memory of cuda device #1
+[2019-08-28 13:05:35.875] [TextHelper] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 13:05:35.895] [TextHelper] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 13:05:35.988] [TextHelper] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 13:05:36.126] [TextHelper] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 13:05:36.508] [TextHelper] [info] Loading font atlas image into memory of cuda device #1
+[2019-08-28 13:14:49.645] [TextHelper] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 13:14:49.664] [TextHelper] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 13:14:49.754] [TextHelper] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 13:14:49.754] [TextHelper] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 13:15:51.593] [TextHelper] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 13:15:51.613] [TextHelper] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 13:15:51.699] [TextHelper] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 13:15:51.700] [TextHelper] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 18:14:40.202] [Atlas] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 18:14:40.222] [Atlas] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 18:14:40.313] [Atlas] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 18:14:40.313] [Atlas] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 18:15:23.980] [Atlas] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 18:15:23.999] [Atlas] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 18:15:24.082] [Atlas] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 18:15:24.083] [Atlas] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 18:20:33.862] [Atlas] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 18:20:33.882] [Atlas] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 18:20:33.971] [Atlas] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 18:20:33.972] [Atlas] [info] Loading font atlas image into memory of cuda device #0
+[2019-08-28 18:20:56.244] [Atlas] [info] Reading font json file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.json
+[2019-08-28 18:20:56.264] [Atlas] [info] Reading font png file: C:\Users\Leonardo\Code\cuda-lapse\cuda-lapse\cuda-lapse\arial-80.png
+[2019-08-28 18:20:56.352] [Atlas] [info] Loading font atlas image into memory of all cuda devices.
+[2019-08-28 18:20:56.353] [Atlas] [info] Loading font atlas image into memory of cuda device #0
