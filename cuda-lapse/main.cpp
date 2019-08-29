@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 		dirWorker->directory = config.directory;
 
 		// Create EXIF workers
-		BaseWorker<image*, image*>::CreateAndStartMany<EXIFWorker>(workers, dirToEXIF, exifToManager, 1);
+		BaseWorker<image*, image*>::CreateAndStartMany<EXIFWorker>(workers, dirToEXIF, exifToManager, 2);
 
 		// Create Manager worker
 		ManagerWorker* managerWorker = BaseWorker<image*, image*>::CreateAndStart<ManagerWorker>(workers, exifToManager, managerToJPEG);
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 #if DEBUG_CUDA
 			int threads = 4;
 #else
-			int threads = static_cast<int>(vram / needed_vram / 0.6);
+			int threads = static_cast<int>(vram / needed_vram);
 
 			logger->info("Creating {} Render Threads for Device {} with available VRAM {}", threads, device, vram);
 #endif

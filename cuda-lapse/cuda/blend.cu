@@ -25,15 +25,16 @@ __global__ void blendKernel(rgb_pixel **frames, rgba_pixel *output, int count, i
 	}
 }
 
-__global__ void blendSingleKernel(rgb_pixel *frame, rgba_pixel *output, int max)
+__global__ void blendSingleKernel(rgb_pixel *frame, rgba_pixel *output, int max, int count)
 {
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
 
 	if (i < max)
 	{
-		unsigned int red = frame[i].red * 1 / 10.0;
-		unsigned int green = frame[i].green * 1 / 10.0;
-		unsigned int blue = frame[i].blue * 1 / 10.0;
+		double factor = 1 / (double)count;
+		unsigned int red = frame[i].red * factor;
+		unsigned int green = frame[i].green * factor;
+		unsigned int blue = frame[i].blue * factor;
 		unsigned int value = (0xff & red) + ((green << 8) & 0xff00) + ((blue << 16) & 0xff0000);
 		//atomicAdd((int*)&output[i], value);
 		unsigned int* output_loc = (unsigned int*)&output[i];
@@ -104,9 +105,9 @@ void blend_directly(rgb_pixel **frames, rgba_pixel *output, int count, int max, 
 	blendKernel << <blocks, threads_per_block >> > (frames, output, count, max);
 }
 
-void blend_single(rgb_pixel *frame, rgba_pixel *output, int max, int blocks, int threads_per_block, cudaStream_t stream)
+void blend_single(rgb_pixel *frame, rgba_pixel *output, int max, int count, int blocks, int threads_per_block, cudaStream_t stream)
 {
-	blendSingleKernel << <blocks, threads_per_block >> > (frame, output, max);
+	blendSingleKernel << <blocks, threads_per_block >> > (frame, output, max, count);
 }
 
 void render_text(cuda_text text, rgba_pixel* output, int max, int width, int blocks, int threads_per_block)

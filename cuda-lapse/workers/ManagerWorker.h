@@ -21,7 +21,7 @@ public:
 	 * \param time 
 	 * \return 
 	 */
-	static long long InputFramesForTimestamp(time_t time);
+	static int InputFramesForTimestamp(time_t time);
 
 	image* Process(image* current) override;
 

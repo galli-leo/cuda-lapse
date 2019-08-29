@@ -1,5 +1,6 @@
 #include "ManagerWorker.h"
 #include "../items/image_fmt.h"
+#include "../cli.h"
 
 #define MIN_SPEEDUP 10
 
@@ -15,6 +16,11 @@ void ManagerWorker::CreateOutputFrame(image* current)
 	output->width = current->width;
 	output->height = current->height;
 	output->inputs.push_back(current);
+
+	if (output->id % 40 == 0)
+	{
+		this->logger->debug("Calculated expected_count: {}, for time: {}", output->expected_count, asctime(localtime(&output->timestamp)));
+	}
 
 	for (long long id = output->start_id; id < output->end_id; id++)
 	{
@@ -34,10 +40,88 @@ void ManagerWorker::CreateOutputFrame(image* current)
 	this->next_input_id = output->end_id;
 }
 
-long long ManagerWorker::InputFramesForTimestamp(time_t time)
+int sec_of_day(const tm* tm)
 {
-	// TODO: Do an actual calculation here!
-	return MIN_SPEEDUP;
+	return tm->tm_hour * 60 * 60 + tm->tm_min * 60 + tm->tm_sec;
+}
+
+int sec_of_week(const tm* tm)
+{
+	return tm->tm_wday * 24 * 60 * 60 + sec_of_day(tm);
+}
+
+const int morning_hour = 7;
+const int night_hour = 19;
+
+const tm night_to_day = tm{ 0, 0, morning_hour };
+const tm day_to_night = tm{ 0, 0, night_hour };
+
+const tm friday_to_saturday = tm{ 0, 0, night_hour, 0, 0, 0, 5 };
+const tm sunday_to_monday = tm{ 0, 0, morning_hour, 0, 0, 0, 1 };
+
+const int morning = sec_of_day(&night_to_day);
+const int night = sec_of_day(&day_to_night);
+const int friday = sec_of_week(&friday_to_saturday);
+const int monday = sec_of_week(&sunday_to_monday);
+
+const double euler = std::exp(1.0);
+
+int ManagerWorker::InputFramesForTimestamp(time_t time)
+{
+	auto lt = localtime(&time);
+
+	int day_secs = sec_of_day(lt);
+	int week_secs = sec_of_week(lt);
+
+	int almost_full = 100 * 60; // In seconds
+
+	double L = 1, k = 0.02 / (almost_full / 100.0);
+	double x0;
+	int d = config.day_speedup;
+	int c = (config.night_speedup - config.day_speedup);
+	int kmod = 1;
+	int x; // Input
+
+	int morning_diff = morning - day_secs;
+	int night_diff = night - day_secs;
+
+	int friday_diff = friday - week_secs;
+	int monday_diff = monday - week_secs;
+
+	if (friday_diff <= 0 || monday_diff >= 0)
+	{
+		// This input frame was taken on the weekend!
+		x = week_secs;
+		if (abs(friday_diff) < abs(monday_diff))
+		{
+			// Closer to friday, than monday.
+			x0 = friday;
+		} else
+		{
+			x0 = monday;
+			kmod = -1;
+		}
+	} else
+	{
+		// Not on weekend!
+		x = day_secs;
+		if (abs(morning_diff) < abs(night_diff))
+		{
+			// Closer to morning
+			x0 = morning;
+			kmod = -1;
+		} else
+		{
+			x0 = night;
+		}
+	}
+
+	k = kmod * k;
+	
+	// Logistic Function
+	double output = L / (1 + pow(euler, -k * (x - x0)));
+	
+	return static_cast<int>(round(c * output + d));
 }
 
 image* ManagerWorker::Process(image* current)

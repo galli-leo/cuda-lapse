@@ -36,7 +36,7 @@ output_frame* RenderWorker::Process(output_frame* current)
 
 		this->LogJPEGError("failed to decode input", nvjpegDecode(this->handle, this->jpeg_state, reinterpret_cast<unsigned char*>(input->jpeg_data), input->jpeg_size, NVJPEG_OUTPUT_RGBI, &image, stream));
 
-		blend_single(tmp, this->dev_output, picture_size, blocks, THREADS_PER_BLOCK, stream);
+		blend_single(tmp, this->dev_output, picture_size, current->expected_count, blocks, THREADS_PER_BLOCK, stream);
 
 		i++;
 	}
